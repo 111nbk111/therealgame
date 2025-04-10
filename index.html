@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cristal Instable – Version Simple (5 Q)</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: monospace, sans-serif;
+      background: linear-gradient(to bottom, #3f1d63, #000);
+      color: #fff;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .center {
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      flex: 1;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px; margin: 20px auto;
+      background: #333; border: 2px solid #4b2e7a;
+      border-radius: 8px; padding: 20px;
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 15px; color: #b8b2ff; }
+    button {
+      background: #5f4bb6; padding: 10px 14px;
+      border-radius: 6px; color: #fff;
+      margin: 6px; border: none; cursor: pointer;
+    }
+    button:hover { background: #7a65d4; }
+    .advert {
+      margin-top: 10px; background: #222;
+      padding: 6px; border-radius: 4px;
+      font-family: monospace; color: #ffeb8a;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+function shuffleArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+// 5 questions fixées, on peut en rajouter
+const allQuestions = [
+  { text: "Le cristal vibre intensément. Quel outil utilisez-vous ?", choices: ["A. Sceptre conducteur", "B. Gants isolants", "C. Injecteur à mana"], correct: "B. Gants isolants" },
+  { text: "Une fissure s'ouvre ! Que faites-vous ?", choices: ["A. Injecter du mana pur", "B. Le refroidir", "C. Fuir"], correct: "B. Le refroidir" },
+  { text: "Le cristal devient rouge. Il pulse !", choices: ["A. Le frapper", "B. Canaliser le flux", "C. L’absorber"], correct: "B. Canaliser le flux" },
+  { text: "Une onde résonne dans la pièce. Réaction ?", choices: ["A. Se recroqueviller", "B. Analyser la fréquence", "C. Poser un cristal miroir"], correct: "C. Poser un cristal miroir" },
+  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser avec une rune" }
+];
+
+// Variables globales
+let questions = [];
+let questionIndex = 0;
+let timer = 20;
+let intervalID = null;
+let started = false;
+let accepted = null;
+let score = 0;
+let logData = [];
+let gameOver = false;
+
+/* ========== MONTAGE DU JEU ========== */
+function initGame() {
+  // On prend toujours TOUTES les questions
+  questions = allQuestions.map(q => ({
+    ...q,
+    choices: shuffleArray(q.choices)
+  }));
+  questionIndex = 0;
+  timer = 20;
+  score = 0;
+  logData = [];
+  gameOver = false;
+  started = true;
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  clearInterval(intervalID);
+  intervalID = setInterval(() => {
+    timer--;
+    if (timer <= 0) {
+      penalize();
+    }
+    render();
+  }, 1000);
+}
+
+function penalize() {
+  logData.push("❌ Mauvaise réponse (temps écoulé)");
+  nextQuestion();
+}
+
+function nextQuestion() {
+  if (questionIndex < questions.length - 1) {
+    questionIndex++;
+    timer = 20;
+  } else {
+    endGame();
+  }
+  render();
+}
+
+function handleChoice(choice) {
+  const currentQ = questions[questionIndex];
+  if (choice === currentQ.correct) {
+    score++;
+    logData.push("✅ Bonne réponse");
+  } else {
+    logData.push("❌ Mauvaise réponse");
+  }
+  nextQuestion();
+}
+
+function endGame() {
+  gameOver = true;
+  started = false;
+  clearInterval(intervalID);
+  render();
+}
+
+/* ========== PALIERS ET MESSAGES ========== */
+function getFinalDescription() {
+  // Palier "pas trop graves"
+  // 0 -> petit traumatisme
+  // 1 -> entorse
+  // 2 -> micro-fracture
+  // 3 -> Main éraflée
+  // 4 -> Douleur résiduelle
+  // 5 -> Aucun dégât
+  switch(score) {
+    case 0: return "⚠️ Petit traumatisme, douleurs intenses";
+    case 1: return "🦶 Entorse légère (doigt ou cheville)";
+    case 2: return "🩺 Micro-fracture corrigée";
+    case 3: return "🥶 Main éraflée, rien de dramatique";
+    case 4: return "🟡 Douleur résiduelle, rien de grave";
+    case 5: return "🎉 Aucun dégât, parfait !";
+    default: return "Inconnu";
+  }
+}
+
+function getAdvertMessage() {
+  // /advert *NA*
+  // en fonction du score
+  if (score === 0) return "/advert *NA* Petit traumatisme subit suite au test 🩸";
+  if (score === 1) return "/advert *NA* Entorse légère après un test raté 🏥";
+  if (score === 2) return "/advert *NA* Micro-fracture : soins en cours 🤕";
+  if (score === 3) return "/advert *NA* Main éraflée, ça ira !";
+  if (score === 4) return "/advert *NA* Douleur mineure, état stable 😀";
+  return "/advert *NA* Cristal stabilisé, aucun dégât 🎉";
+}
+
+/* ========== REJET "NON" ========== */
+function handleRefusal() {
+  // score=0 direct, gameover
+  score = 0;
+  logData = ["Le joueur a refusé le test."];
+  gameOver = true;
+  started = false;
+  accepted = false;
+  clearInterval(intervalID);
+  render();
+}
+
+/* ========== RESTART ========== */
+function restartGame() {
+  accepted = null;
+  started = false;
+  score = 0;
+  gameOver = false;
+  logData = [];
+  render();
+}
+
+/* ========== RENDER ========== */
+function render() {
+  const app = document.getElementById("app");
+
+  // 1) accepted===null => ecran d'accueil
+  if (accepted === null) {
+    app.innerHTML = `
+      <div class="center">
+        <h1>🧪 Test Cristal Instable – 5 questions</h1>
+        <p style="margin:10px 0;">Voulez-vous lancer le test ?</p>
+        <div>
+          <button onclick="accepted=true; initGame()" class="button" style="background:#3cb46e;">Oui</button>
+          <button onclick="handleRefusal()" class="button" style="background:#e54848;">Non</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // 2) si non + gameover => ecran final direct
+  if (accepted === false && gameOver) {
+    const logList = logData.map(item => `<li>${item}</li>`).join("");
+    app.innerHTML = `
+      <div class="center">
+        <div class="container">
+          <h1>Résultat final : Score = ${score}/5</h1>
+          <p>${getFinalDescription()}</p>
+          <p style="margin-top:10px;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
+          <div class="advert">${getAdvertMessage()}</div>
+          <button class="button" style="margin-top:10px;" onclick="restartGame()">Recommencer</button>
+          ${
+            logList
+              ? `<div style="margin-top:20px;">
+                  <h2 style="margin-bottom:8px;color:#b8b2ff;">Journal :</h2>
+                  <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
+                    ${logList}
+                  </ul>
+                </div>`
+              : ""
+          }
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // 3) si jeu pas lancé => param
+  if (!started && !gameOver && accepted) {
+    // scenario bizarre => on force un init ? ou ecran ?
+    initGame();
+    return;
+  }
+
+  // 4) si gameOver => ecran fin normal
+  if (gameOver && !started) {
+    const logList = logData.map(item => `<li>${item}</li>`).join("");
+    app.innerHTML = `
+      <div class="center">
+        <div class="container">
+          <h1>Résultat final : Score = ${score}/5</h1>
+          <p>${getFinalDescription()}</p>
+          <p style="margin-top:10px;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
+          <div class="advert">${getAdvertMessage()}</div>
+          <button class="button" style="margin-top:10px;" onclick="restartGame()">Recommencer</button>
+          ${
+            logList
+              ? `<div style="margin-top:20px;">
+                  <h2 style="margin-bottom:8px;color:#b8b2ff;">Journal :</h2>
+                  <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
+                    ${logList}
+                  </ul>
+                </div>`
+              : ""
+          }
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // 5) ecran de jeu en cours
+  const currentQ = questions[questionIndex];
+  app.innerHTML = `
+    <div class="container">
+      <h1>🧪 Cristal Instable (5 questions)</h1>
+      <p>Question ${questionIndex+1}/5 | Score : ${score}</p>
+      <p>Temps : ${timer}s</p>
+      <p style="margin:10px 0;">${currentQ.text}</p>
+      <div class="choices">
+        ${currentQ.choices.map(c => `
+          <button onclick="handleChoice('${c}')" class="button">${c}</button>
+        `).join("")}
+      </div>
+      ${renderLog()}
+    </div>
+  `;
+}
+
+function renderLog() {
+  if (!logData.length) return "";
+  const list = logData.map(item => `<li>${item}</li>`).join("");
+  return `
+    <div style="margin-top:15px;">
+      <h2 style="color:#b8b2ff;">Journal :</h2>
+      <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
+        ${list}
+      </ul>
+    </div>
+  `;
+}
+
+// Lancement initial
+render();
+</script>
+
+</body>
+</html>
