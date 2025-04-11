@@ -4,41 +4,43 @@
   <meta charset="UTF-8">
   <title>Cristal Instable – Surcharge Fragmentée</title>
   <style>
+    /* ========== STYLES BASIQUES ========== */
     body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       font-family: monospace, sans-serif;
-      /* Dégradé du haut (#3f1d63) vers le bas (#000) */
-      background: linear-gradient(to bottom, #3f1d63 0%, #000 100%);
+      /* Nouveau dégradé plus stable (haut: #3f1d63 → bas: #1e0030) */
+      background: linear-gradient(to bottom, #3f1d63 0%, #1e0030 100%);
       color: #fff;
       min-height: 100vh;
     }
-    .centered {
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center;
-      min-height: 100vh; padding: 20px;
-    }
     .container {
-      max-width: 700px; margin: 40px auto;
-      background: #333; border: 2px solid #4b2e7a;
-      border-radius: 8px; padding: 20px;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #333;
+      border: 2px solid #4b2e7a;
+      border-radius: 8px;
+      padding: 20px;
     }
     h1 {
-      font-size: 1.8rem; margin-bottom: 15px; color: #b8b2ff;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #b8b2ff;
     }
     .button {
-      display: inline-block; background: #5f4bb6;
-      padding: 10px 14px; border-radius: 6px;
-      text-decoration: none; color: #fff; margin: 8px;
-      cursor: pointer; border: none;
+      display: inline-block;
+      background: #5f4bb6;
+      padding: 10px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #fff;
+      margin: 6px 0;
+      cursor: pointer;
+      border: none;
       font-size: 1rem;
     }
     .button:hover {
       background: #7a65d4;
-    }
-    .choices button {
-      width: 100%; margin: 5px 0;
-      background: #4b2e7a; font-size: 1rem;
     }
     .bounce {
       animation: bounce 1s infinite alternate;
@@ -47,10 +49,19 @@
       0% { transform: translateY(0px); }
       100% { transform: translateY(-10px); }
     }
+    .choices button {
+      width: 100%;
+      margin: 5px 0;
+      background: #4b2e7a;
+      font-size: 1rem;
+    }
     .advert {
-      background: #222; padding: 6px;
-      margin-top: 10px; border-radius: 4px;
-      font-family: monospace; color: #ffeb8a;
+      font-family: monospace;
+      color: #ffeb8a;
+      margin-top: 8px;
+      background: #222;
+      padding: 5px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -181,6 +192,17 @@ function getWhatIfMessage() {
   `;
 }
 
+function handleRefusal() {
+  accepted = false;
+  // On force un score=0, showExplosion, gameOver
+  score = 0;
+  gameOver = true;
+  showExplosion = true;
+  started = false;
+  questions = [];  // vide
+  render();
+}
+
 function restartGame() {
   accepted = null;
   started = false;
@@ -192,7 +214,7 @@ function restartGame() {
 function render() {
   const app = document.getElementById("app");
 
-  // Écran 1 : question oui/non
+  // ÉCRAN 1 : question oui/non
   if (accepted === null) {
     app.innerHTML = `
       <div class="centered">
@@ -206,9 +228,8 @@ function render() {
     return;
   }
 
-  // Écran 2 : on a refusé => on gère direct un scoreboard = 0 
+  // ÉCRAN 2 : on a refusé => scoreboard = 0
   if (!started && !questions.length && accepted === false && gameOver) {
-    // Écran final de refus
     const logList = logData.map(item => `<li>${item}</li>`).join("");
     app.innerHTML = `
       <div class="centered">
@@ -217,7 +238,8 @@ function render() {
           <p style="font-weight:bold;">🔍 Résultats :</p>
           <p style="color:lightgreen;">Score : ${score} / 10</p>
           <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-          ${showExplosion 
+          ${
+            showExplosion
             ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
             : ""
           }
@@ -227,7 +249,7 @@ function render() {
           <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
           
           ${
-            logList 
+            logList
             ? `<div style="margin-top:20px;">
                 <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
                 <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
@@ -255,14 +277,13 @@ function render() {
     return;
   }
 
-  // Écran de fin normal
+  // ÉCRAN DE FIN normal
   if (gameOver && !started && questions.length) {
     const explosionMarkup = showExplosion
       ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
       : "";
 
     const logList = logData.map(item => `<li>${item}</li>`).join("");
-
     app.innerHTML = `
       <div class="container">
         <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
@@ -275,7 +296,7 @@ function render() {
         <div class="advert">${getAdvertMessage()}</div>
         <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
         ${
-          logList 
+          logList
           ? `<div style="margin-top:20px;">
               <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
               <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
@@ -292,7 +313,7 @@ function render() {
     return;
   }
 
-  // Écran de jeu en cours
+  // ÉCRAN DE JEU
   const currentQ = questions[questionIndex];
   const logList = logData.map(item => `<li>${item}</li>`).join("");
 
@@ -302,8 +323,8 @@ function render() {
       <p>⏳ Temps restant : <span style="color:#ffeb8a;font-weight:bold;">${timer}s</span></p>
       <p style="margin:10px 0;">${currentQ.text}</p>
       <div class="choices">
-        ${currentQ.choices.map((c) => `
-          <button class="button" onclick="handleChoice('${c}')">${c}</button>
+        ${currentQ.choices.map((choice) => `
+          <button class="button" onclick="handleChoice('${choice}')">${choice}</button>
         `).join("")}
       </div>
       ${
@@ -329,11 +350,13 @@ function handleRefusal() {
   showExplosion = true;
   started = false;
   questions = [];  // vide
+  logData = ["Le joueur a refusé le test"];
   render();
 }
 
 /* ====== Lancement initial ====== */
 render();
 </script>
+
 </body>
 </html>
