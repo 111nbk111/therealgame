@@ -4,39 +4,37 @@
   <meta charset="UTF-8">
   <title>Cristal Instable – Surcharge Fragmentée</title>
   <style>
-    /* ========== STYLES GLOBAUX ========== */
+    /* ====== STYLES GLOBAUX ====== */
     html, body {
-      margin: 0; padding: 0;
-      height: 100%; width: 100%;
+      margin: 0; 
+      padding: 0;
       font-family: monospace, sans-serif;
       background: linear-gradient(to bottom, #3f1d63 0%, #1e0030 100%);
       color: #fff;
+      height: 100%;
+      width: 100%;
     }
+
+    /* Le #app n'est plus centré */
     #app {
-      display: flex; 
-      flex-direction: column;
-      justify-content: center; 
-      align-items: center;
-      min-height: 100vh;
       padding: 20px;
-      text-align: center;
     }
+
     .container {
-      max-width: 700px; 
-      margin: 0 auto;
+      /* Retrait du margin:0 auto et text-align:left explicite */
       background: #333; 
       border: 2px solid #4b2e7a;
       border-radius: 8px; 
       padding: 20px;
-      text-align: left; /* Aligne le contenu à gauche */
+      text-align: left; 
     }
+
     h1 {
       font-size: 1.8rem; 
       margin-bottom: 15px; 
       color: #b8b2ff;
     }
     .button {
-      display: inline-block; 
       background: #5f4bb6;
       padding: 10px 14px; 
       border-radius: 6px;
@@ -71,13 +69,9 @@
       padding: 5px;
       border-radius: 4px;
     }
-    .title-center {
-      text-align: center;
-    }
   </style>
 </head>
 <body>
-
 <div id="app"></div>
 
 <script>
@@ -99,7 +93,6 @@ const allQuestions = [
   { text: "Le cristal projette une image inconnue.", choices: ["A. Tenter une communication mentale", "B. La briser", "C. Toucher l’image"], correct: "A. Tenter une communication mentale" }
 ];
 
-// Variables
 let questions = [];
 let questionIndex = 0;
 let timer = 20;
@@ -190,7 +183,7 @@ function getFinalMessage() {
 function getWhatIfMessage() {
   return `
     <h3 style="color:#7cafff;margin-top:10px;">🧠 Et si tu avais échoué ?</h3>
-    <ul style="color:#ccc;font-size:0.9rem; margin-left:20px;">
+    <ul style="color:#ccc;font-size:0.9rem;">
       <li>0 bonnes réponses : CK instantané ☠️</li>
       <li>1 à 2 bonnes réponses : Perte d'un œil + d'une main 🩸</li>
       <li>3 à 4 bonnes réponses : Perte d'une main 🖐️</li>
@@ -222,8 +215,8 @@ function render() {
 
   if (accepted === null) {
     app.innerHTML = `
-      <h1 style="font-size:2rem;">🧪 Vous voulez lutter pour votre vie ?</h1>
-      <div>
+      <h1 style="font-size:2rem; text-align:center;">🧪 Vous voulez lutter pour votre vie ?</h1>
+      <div style="text-align:center;">
         <button class="button" style="background:#3cb46e;" onclick="accepted=true;initGame();">Oui</button>
         <button class="button" style="background:#e54848;" onclick="accepted=false;handleRefusal();">Non</button>
       </div>
@@ -249,7 +242,7 @@ function render() {
           logList
             ? `<div style="margin-top:20px;">
                 <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;margin-left:20px;">
+                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
                   ${logList}
                 </ul>
               </div>`
@@ -269,13 +262,12 @@ function render() {
     return;
   }
 
-  // Fin normal
+  // fin normal
   if (gameOver && !started && questions.length) {
     const explosionMarkup = showExplosion
       ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
       : "";
     const logList = logData.map(item => `<li>${item}</li>`).join("");
-
     app.innerHTML = `
       <div class="container">
         <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
@@ -292,7 +284,7 @@ function render() {
           logList
             ? `<div style="margin-top:20px;">
                 <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;margin-left:20px;">
+                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
                   ${logList}
                 </ul>
               </div>`
@@ -306,10 +298,9 @@ function render() {
     return;
   }
 
-  // Jeu en cours
+  // jeu
   const currentQ = questions[questionIndex];
   const logList = logData.map(item => `<li>${item}</li>`).join("");
-
   app.innerHTML = `
     <div class="container">
       <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
@@ -324,7 +315,7 @@ function render() {
         logList
           ? `<div style="margin-top:20px;">
               <h2 style="color:#b8b2ff;">🧾 Journal :</h2>
-              <ul style="font-size:0.9rem;color:#ccc;list-style:disc;margin-left:20px;">
+              <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
                 ${logList}
               </ul>
             </div>`
@@ -334,7 +325,6 @@ function render() {
   `;
 }
 
-/* Lancement initial */
 render();
 </script>
 </body>
