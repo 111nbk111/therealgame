@@ -4,60 +4,42 @@
   <meta charset="UTF-8">
   <title>Cristal Instable – Surcharge Fragmentée</title>
   <style>
-    /* ====== STYLES GLOBAUX ====== */
-    html, body {
-      margin: 0; 
+    /* ========== STYLES BASIQUES ========== */
+    body {
+      margin: 0;
       padding: 0;
       font-family: monospace, sans-serif;
-      background: linear-gradient(to bottom, #3f1d63 0%, #1e0030 100%);
+      background: linear-gradient(to bottom, #3f1d63, #000);
       color: #fff;
-      height: 100%; 
-      width: 100%;
+      min-height: 100vh;
     }
-
-    /* #app laisse tout s'afficher en flux normal (pas de centrage) */
-    #app {
-      padding: 20px;
-    }
-
     .container {
-      /* Pas de margin auto */
-      background: #333; 
+      max-width: 700px;
+      margin: 30px auto;
+      background: #333;
       border: 2px solid #4b2e7a;
-      border-radius: 8px; 
+      border-radius: 8px;
       padding: 20px;
-      text-align: left; /* Tout le texte est à gauche */
-      margin-bottom: 20px; /* Petit espace en bas */
     }
-
     h1 {
       font-size: 1.8rem;
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
       color: #b8b2ff;
     }
-
     .button {
+      display: inline-block;
       background: #5f4bb6;
       padding: 10px 14px;
       border-radius: 6px;
-      text-decoration: none; 
+      text-decoration: none;
       color: #fff;
-      margin: 6px 8px 6px 0; /* Espace à droite */
-      cursor: pointer; 
+      margin: 6px 0;
+      cursor: pointer;
       border: none;
-      font-size: 1rem;
     }
     .button:hover {
       background: #7a65d4;
     }
-
-    .choices button {
-      width: 100%; 
-      margin: 5px 0;
-      background: #4b2e7a; 
-      font-size: 1rem;
-    }
-
     .bounce {
       animation: bounce 1s infinite alternate;
     }
@@ -65,7 +47,11 @@
       0% { transform: translateY(0px); }
       100% { transform: translateY(-10px); }
     }
-
+    .choices button {
+      width: 100%;
+      margin: 5px 0;
+      background: #4b2e7a;
+    }
     .advert {
       font-family: monospace;
       color: #ffeb8a;
@@ -73,6 +59,12 @@
       background: #222;
       padding: 5px;
       border-radius: 4px;
+    }
+    .notes {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      font-style: italic;
     }
   </style>
 </head>
@@ -92,7 +84,7 @@ const allQuestions = [
   { text: "Une fissure s'ouvre ! Que faites-vous ?", choices: ["A. Injecter du mana pur", "B. Le refroidir", "C. Fuir"], correct: "B. Le refroidir" },
   { text: "Le cristal devient rouge. Il pulse !", choices: ["A. Le frapper", "B. Canaliser le flux", "C. L’absorber"], correct: "B. Canaliser le flux" },
   { text: "Une onde résonne dans la pièce. Réaction ?", choices: ["A. Se recroqueviller", "B. Analyser la fréquence", "C. Poser un cristal miroir"], correct: "C. Poser un cristal miroir" },
-  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser une rune" },
+  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser avec une rune" },
   { text: "Des éclats flottent autour du cristal.", choices: ["A. Utiliser une cage de stabilisation", "B. Toucher les éclats", "C. Attendre sans rien faire"], correct: "A. Utiliser une cage de stabilisation" },
   { text: "Un sifflement aigu se fait entendre.", choices: ["A. Couvrir ses oreilles", "B. Résonner avec un champ de mana", "C. Parler au cristal"], correct: "B. Résonner avec un champ de mana" },
   { text: "Le cristal devient noir quelques secondes.", choices: ["A. Souffler dessus", "B. L’éloigner", "C. Injecter un peu de lumière"], correct: "C. Injecter un peu de lumière" },
@@ -100,8 +92,8 @@ const allQuestions = [
   { text: "Le cristal projette une image inconnue.", choices: ["A. Tenter une communication mentale", "B. La briser", "C. Toucher l’image"], correct: "A. Tenter une communication mentale" }
 ];
 
-// Variables
-let questions = [];
+// Variables principales
+let questions = [];    // contiendra 10 questions tirées
 let questionIndex = 0;
 let timer = 20;
 let intervalID = null;
@@ -112,13 +104,13 @@ let logData = [];
 let gameOver = false;
 let showExplosion = false;
 
-/* ========== Lance le jeu ========== */
+/* ========== Prépare & Lance le Jeu ========== */
 function initGame() {
-  const selected = shuffleArray(allQuestions).slice(0, 10).map(q => ({
+  // Mélanger + prendre 10 questions (ici la liste fait déjà 10)
+  questions = shuffleArray(allQuestions).map(q => ({
     ...q,
     choices: shuffleArray(q.choices)
   }));
-  questions = selected;
   questionIndex = 0;
   timer = 20;
   score = 0;
@@ -175,7 +167,7 @@ function endGame() {
   render();
 }
 
-/* ========== TEXTES & MESSAGES ========== */
+/* ========== Messages finaux selon le score ========== */
 function getAdvertMessage() {
   if (score === 0) return "/advert *NA* L'utilisateur a échoué. Le cristal l'a consumé. État : CK ☠️";
   if (score < 2) return "/advert *NA* Blessures critiques : perte d'un œil et d'une main. Gravement touché 🩸";
@@ -193,7 +185,7 @@ function getFinalMessage() {
 function getWhatIfMessage() {
   return `
     <h3 style="color:#7cafff;margin-top:10px;">🧠 Et si tu avais échoué ?</h3>
-    <ul style="color:#ccc;font-size:0.9rem;">
+    <ul style="margin-left:20px;color:#ccc;font-size:0.9rem;">
       <li>0 bonnes réponses : CK instantané ☠️</li>
       <li>1 à 2 bonnes réponses : Perte d'un œil + d'une main 🩸</li>
       <li>3 à 4 bonnes réponses : Perte d'une main 🖐️</li>
@@ -203,13 +195,13 @@ function getWhatIfMessage() {
 }
 
 function handleRefusal() {
-  accepted = false;
+  // Si on refuse, on revient sur un ecran style “non” + on ne commence pas le jeu
+  // Score=0 => CK
   score = 0;
   gameOver = true;
-  showExplosion = true;
   started = false;
-  questions = [];
-  logData = ["Le joueur a refusé le test."];
+  showExplosion = true;
+  logData = ["Le joueur a refusé le test"];
   render();
 }
 
@@ -220,81 +212,72 @@ function restartGame() {
   render();
 }
 
+/* ========== RENDER ========== */
 function render() {
   const app = document.getElementById("app");
 
-  // Ecran d'accueil
+  // Écran d’accueil
   if (accepted === null) {
     app.innerHTML = `
-      <div class="container">
-        <h1>🧪 Vous voulez lutter pour votre vie ?</h1>
-        <button class="button" style="background:#3cb46e;" onclick="accepted=true;initGame();">Oui</button>
-        <button class="button" style="background:#e54848;" onclick="accepted=false;handleRefusal();">Non</button>
+      <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#000;color:#fff;text-align:center;padding:20px;">
+        <h1 style="font-size:2rem;margin-bottom:20px;">🧪 Vous voulez lutter pour votre vie ?</h1>
+        <div>
+          <button class="button" style="background:#3cb46e;" onclick="accepted=true;initGame()">Oui</button>
+          <button class="button" style="background:#e54848;" onclick="accepted=false;handleRefusal()">Non</button>
+        </div>
       </div>
     `;
     return;
   }
 
-  // Refus direct => scoreboard=0
-  if (!started && !questions.length && accepted === false && gameOver) {
+  // Si on a refusé => Écran de fin direct (score=0)
+  if (accepted === false && !started && gameOver) {
     const logList = logData.map(item => `<li>${item}</li>`).join("");
     app.innerHTML = `
-      <div class="container">
-        <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
-        <p style="font-weight:bold;">Score : ${score} / 10</p>
-        <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-        ${
-          showExplosion
-          ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
-          : ""
-        }
-        ${getWhatIfMessage()}
-        <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
-        <div class="advert">${getAdvertMessage()}</div>
-        <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
-        
-        ${
-          logList
-            ? `<div style="margin-top:20px;">
-                <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
-                  ${logList}
-                </ul>
-              </div>`
-            : ""
-        }
-        <p style="margin-top:20px;font-size:0.8rem;font-style:italic;color:#999;">
-          Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬
-        </p>
+      <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#000;color:#fff;text-align:center;padding:20px;">
+        <div class="container">
+          <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
+          <p style="font-weight:bold;">Score : ${score} / 10</p>
+          <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
+          ${showExplosion ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>` : ""}
+          ${getWhatIfMessage()}
+          <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
+          <div class="advert">${getAdvertMessage()}</div>
+          <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
+          
+          ${
+            logList
+              ? `<div style="margin-top:20px;">
+                  <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
+                  <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
+                    ${logList}
+                  </ul>
+                </div>`
+              : ""
+          }
+          <p class="notes">Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬</p>
+        </div>
       </div>
     `;
     return;
   }
 
-  // chargement
+  // Cas : pas de questions => chargement
   if (!questions.length && started) {
-    app.innerHTML = `
-      <div class="container">
-        <p>Chargement des questions...</p>
-      </div>
-    `;
+    app.innerHTML = `<div style="min-height:100vh;display:flex;justify-content:center;align-items:center;background:#000;"><p>Chargement des questions...</p></div>`;
     return;
   }
 
-  // Ecran de fin normal
+  // Écran de fin normal
   if (gameOver && !started && questions.length) {
-    const explosionMarkup = showExplosion
-      ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
-      : "";
     const logList = logData.map(item => `<li>${item}</li>`).join("");
-
     app.innerHTML = `
       <div class="container">
         <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
         <p style="font-weight:bold;">🔍 Résultats :</p>
         <p style="color:lightgreen;">Score : ${score} / 10</p>
         <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-        ${explosionMarkup}
+        ${showExplosion ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>` : ""}
         ${getWhatIfMessage()}
         <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
         <div class="advert">${getAdvertMessage()}</div>
@@ -304,21 +287,19 @@ function render() {
           logList
             ? `<div style="margin-top:20px;">
                 <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
+                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
                   ${logList}
                 </ul>
               </div>`
             : ""
         }
-        <p style="margin-top:20px;font-size:0.8rem;font-style:italic;color:#999;">
-          Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬
-        </p>
+        <p class="notes">Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬</p>
       </div>
     `;
     return;
   }
 
-  // Jeu en cours
+  // Écran de jeu
   const currentQ = questions[questionIndex];
   const logList = logData.map(item => `<li>${item}</li>`).join("");
   app.innerHTML = `
@@ -327,15 +308,18 @@ function render() {
       <p>⏳ Temps restant : <span style="color:#ffeb8a;font-weight:bold;">${timer}s</span></p>
       <p style="margin:10px 0;">${currentQ.text}</p>
       <div class="choices">
-        ${currentQ.choices.map((choice) => `
-          <button class="button" onclick="handleChoice('${choice}')">${choice}</button>
+        ${currentQ.choices.map((choice, idx) => `
+          <button class="button" style="width:100%;margin:5px 0;" onclick="handleChoice('${choice}')">
+            ${choice}
+          </button>
         `).join("")}
       </div>
+
       ${
-        logList
+        logList.length
           ? `<div style="margin-top:20px;">
               <h2 style="color:#b8b2ff;">🧾 Journal :</h2>
-              <ul style="color:#ccc;font-size:0.9rem;list-style:disc;">
+              <ul style="font-size:0.9rem;color:#ccc;list-style:disc;padding-left:20px;">
                 ${logList}
               </ul>
             </div>`
@@ -345,8 +329,8 @@ function render() {
   `;
 }
 
+/* ========== Lancement initial ========== */
 render();
 </script>
-
 </body>
 </html>
