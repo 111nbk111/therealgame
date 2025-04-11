@@ -11,36 +11,38 @@
       font-family: monospace, sans-serif;
       background: linear-gradient(to bottom, #3f1d63 0%, #1e0030 100%);
       color: #fff;
-      height: 100%;
+      height: 100%; 
       width: 100%;
     }
 
-    /* Le #app n'est plus centré */
+    /* #app laisse tout s'afficher en flux normal (pas de centrage) */
     #app {
       padding: 20px;
     }
 
     .container {
-      /* Retrait du margin:0 auto et text-align:left explicite */
+      /* Pas de margin auto */
       background: #333; 
       border: 2px solid #4b2e7a;
       border-radius: 8px; 
       padding: 20px;
-      text-align: left; 
+      text-align: left; /* Tout le texte est à gauche */
+      margin-bottom: 20px; /* Petit espace en bas */
     }
 
     h1 {
-      font-size: 1.8rem; 
-      margin-bottom: 15px; 
+      font-size: 1.8rem;
+      margin-bottom: 15px;
       color: #b8b2ff;
     }
+
     .button {
       background: #5f4bb6;
-      padding: 10px 14px; 
+      padding: 10px 14px;
       border-radius: 6px;
       text-decoration: none; 
-      color: #fff; 
-      margin: 6px 8px;
+      color: #fff;
+      margin: 6px 8px 6px 0; /* Espace à droite */
       cursor: pointer; 
       border: none;
       font-size: 1rem;
@@ -48,12 +50,14 @@
     .button:hover {
       background: #7a65d4;
     }
+
     .choices button {
       width: 100%; 
-      margin: 5px 0; 
+      margin: 5px 0;
       background: #4b2e7a; 
       font-size: 1rem;
     }
+
     .bounce {
       animation: bounce 1s infinite alternate;
     }
@@ -61,6 +65,7 @@
       0% { transform: translateY(0px); }
       100% { transform: translateY(-10px); }
     }
+
     .advert {
       font-family: monospace;
       color: #ffeb8a;
@@ -72,20 +77,22 @@
   </style>
 </head>
 <body>
+
 <div id="app"></div>
 
 <script>
+/* ================== FONCTIONS UTILES ================== */
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-// 10 questions
+/* ================== LISTE DE QUESTIONS ================== */
 const allQuestions = [
   { text: "Le cristal vibre intensément. Quel outil utilisez-vous ?", choices: ["A. Sceptre conducteur", "B. Gants isolants", "C. Injecteur à mana"], correct: "B. Gants isolants" },
   { text: "Une fissure s'ouvre ! Que faites-vous ?", choices: ["A. Injecter du mana pur", "B. Le refroidir", "C. Fuir"], correct: "B. Le refroidir" },
   { text: "Le cristal devient rouge. Il pulse !", choices: ["A. Le frapper", "B. Canaliser le flux", "C. L’absorber"], correct: "B. Canaliser le flux" },
   { text: "Une onde résonne dans la pièce. Réaction ?", choices: ["A. Se recroqueviller", "B. Analyser la fréquence", "C. Poser un cristal miroir"], correct: "C. Poser un cristal miroir" },
-  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser avec une rune" },
+  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser une rune" },
   { text: "Des éclats flottent autour du cristal.", choices: ["A. Utiliser une cage de stabilisation", "B. Toucher les éclats", "C. Attendre sans rien faire"], correct: "A. Utiliser une cage de stabilisation" },
   { text: "Un sifflement aigu se fait entendre.", choices: ["A. Couvrir ses oreilles", "B. Résonner avec un champ de mana", "C. Parler au cristal"], correct: "B. Résonner avec un champ de mana" },
   { text: "Le cristal devient noir quelques secondes.", choices: ["A. Souffler dessus", "B. L’éloigner", "C. Injecter un peu de lumière"], correct: "C. Injecter un peu de lumière" },
@@ -93,6 +100,7 @@ const allQuestions = [
   { text: "Le cristal projette une image inconnue.", choices: ["A. Tenter une communication mentale", "B. La briser", "C. Toucher l’image"], correct: "A. Tenter une communication mentale" }
 ];
 
+// Variables
 let questions = [];
 let questionIndex = 0;
 let timer = 20;
@@ -104,6 +112,7 @@ let logData = [];
 let gameOver = false;
 let showExplosion = false;
 
+/* ========== Lance le jeu ========== */
 function initGame() {
   const selected = shuffleArray(allQuestions).slice(0, 10).map(q => ({
     ...q,
@@ -166,6 +175,7 @@ function endGame() {
   render();
 }
 
+/* ========== TEXTES & MESSAGES ========== */
 function getAdvertMessage() {
   if (score === 0) return "/advert *NA* L'utilisateur a échoué. Le cristal l'a consumé. État : CK ☠️";
   if (score < 2) return "/advert *NA* Blessures critiques : perte d'un œil et d'une main. Gravement touché 🩸";
@@ -213,10 +223,11 @@ function restartGame() {
 function render() {
   const app = document.getElementById("app");
 
+  // Ecran d'accueil
   if (accepted === null) {
     app.innerHTML = `
-      <h1 style="font-size:2rem; text-align:center;">🧪 Vous voulez lutter pour votre vie ?</h1>
-      <div style="text-align:center;">
+      <div class="container">
+        <h1>🧪 Vous voulez lutter pour votre vie ?</h1>
         <button class="button" style="background:#3cb46e;" onclick="accepted=true;initGame();">Oui</button>
         <button class="button" style="background:#e54848;" onclick="accepted=false;handleRefusal();">Non</button>
       </div>
@@ -224,7 +235,7 @@ function render() {
     return;
   }
 
-  // Refus direct
+  // Refus direct => scoreboard=0
   if (!started && !questions.length && accepted === false && gameOver) {
     const logList = logData.map(item => `<li>${item}</li>`).join("");
     app.innerHTML = `
@@ -232,7 +243,11 @@ function render() {
         <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
         <p style="font-weight:bold;">Score : ${score} / 10</p>
         <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-        ${showExplosion ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>` : ""}
+        ${
+          showExplosion
+          ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
+          : ""
+        }
         ${getWhatIfMessage()}
         <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
         <div class="advert">${getAdvertMessage()}</div>
@@ -258,16 +273,21 @@ function render() {
 
   // chargement
   if (!questions.length && started) {
-    app.innerHTML = `<p>Chargement des questions...</p>`;
+    app.innerHTML = `
+      <div class="container">
+        <p>Chargement des questions...</p>
+      </div>
+    `;
     return;
   }
 
-  // fin normal
+  // Ecran de fin normal
   if (gameOver && !started && questions.length) {
     const explosionMarkup = showExplosion
       ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>`
       : "";
     const logList = logData.map(item => `<li>${item}</li>`).join("");
+
     app.innerHTML = `
       <div class="container">
         <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
@@ -298,7 +318,7 @@ function render() {
     return;
   }
 
-  // jeu
+  // Jeu en cours
   const currentQ = questions[questionIndex];
   const logList = logData.map(item => `<li>${item}</li>`).join("");
   app.innerHTML = `
@@ -327,5 +347,6 @@ function render() {
 
 render();
 </script>
+
 </body>
 </html>
