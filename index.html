@@ -2,335 +2,294 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Cristal Instable – Surcharge Fragmentée</title>
+  <title>EF3 – Parcours de certification complémentaire | Mehdi TAMIRO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ========== STYLES BASIQUES ========== */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: monospace, sans-serif;
-      background: linear-gradient(to bottom, #3f1d63, #000);
-      color: #fff;
-      min-height: 100vh;
+    /* ========== RESET ========== */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+    body{background:#f9fafb;color:#1f2937;overflow-x:hidden;scroll-behavior:smooth;}
+
+    /* ========== VARIABLES ========== */
+    :root{
+      --sidebar-width:16rem;
+      --accent:#60a5fa;
+      --gradient:linear-gradient(90deg,#3b82f6,#8b5cf6);
+      --radius:.75rem;
+      --shadow:0 4px 10px rgba(0,0,0,.08);
+      --max-width:1100px;
     }
-    .container {
-      max-width: 700px;
-      margin: 30px auto;
-      background: #333;
-      border: 2px solid #4b2e7a;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #b8b2ff;
-    }
-    .button {
-      display: inline-block;
-      background: #5f4bb6;
-      padding: 10px 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #fff;
-      margin: 6px 0;
-      cursor: pointer;
-      border: none;
-    }
-    .button:hover {
-      background: #7a65d4;
-    }
-    .bounce {
-      animation: bounce 1s infinite alternate;
-    }
-    @keyframes bounce {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-10px); }
-    }
-    .choices button {
-      width: 100%;
-      margin: 5px 0;
-      background: #4b2e7a;
-    }
-    .advert {
-      font-family: monospace;
-      color: #ffeb8a;
-      margin-top: 8px;
-      background: #222;
-      padding: 5px;
-      border-radius: 4px;
-    }
-    .notes {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      font-style: italic;
+
+    /* ========== LAYOUT ========== */
+    .layout{display:flex;min-height:100vh;}
+    .content{margin-left:var(--sidebar-width);width:calc(100% - var(--sidebar-width));padding:2rem;display:flex;flex-direction:column;align-items:center;}
+    section{width:100%;max-width:var(--max-width);padding:4rem 1rem;text-align:center;}
+    .divider{width:4rem;height:3px;background:#000;margin:1rem auto 2.5rem;border-radius:2px;}
+    .title-big{font-size:2.3rem;font-weight:800;margin-bottom:.5rem;}
+
+    /* ===== SIDEBAR ===== */
+    .sidebar{width:var(--sidebar-width);position:fixed;top:0;left:0;height:100%;background:linear-gradient(#111827,#1f2937);color:#fff;padding:1.7rem;border-radius:0 var(--radius) var(--radius) 0;display:flex;flex-direction:column;box-shadow:0 0 14px rgba(0,0,0,.38);}  
+    .sidebar-time{text-align:center;font-size:.9rem;margin-bottom:1.3rem;line-height:1.25;}
+    .sidebar-title{text-align:center;font-size:1.6rem;font-weight:700;margin-bottom:1.3rem;line-height:1.3;}
+    .accent{color:var(--accent);}  
+    .nav-links{display:flex;flex-direction:column;gap:.7rem;}
+    .nav-btn{display:flex;align-items:center;gap:.55rem;padding:.5rem .8rem;border-radius:.5rem;color:#fff;text-decoration:none;transition:background .25s;font-size:1.05rem;}
+    .nav-btn:hover{background:#374151;}
+    .footer-text{margin-top:auto;text-align:center;font-size:.75rem;color:#9ca3af;}
+
+    /* ===== HERO ===== */
+    #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:1.7rem;max-width:44rem;margin:0 auto;}
+    .hero-sub{font-size:3.2rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+    .hero-title{font-size:2.8rem;font-weight:800;line-height:1.23;}
+    .hero-accroche{font-size:1.4rem;font-weight:600;line-height:1.46;}
+    .btn-main{display:inline-block;background:var(--gradient);color:#fff;padding:.9rem 1.8rem;border-radius:var(--radius);font-size:1.05rem;text-decoration:none;box-shadow:0 3px 9px rgba(0,0,0,.17);transition:opacity .25s;}
+    .btn-main:hover{opacity:.9;}
+
+    /* ===== CERTIFICATIONS GRID ===== */
+    .compet-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:2.2rem;max-width:var(--max-width);margin:3rem auto;}
+    .compet-card{width:300px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:2.4rem 1.9rem;display:flex;flex-direction:column;align-items:center;gap:1.4rem;transition:transform .25s;}
+    .compet-card:hover{transform:translateY(-10px);}  
+    .compet-logo{width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.08));}
+    .compet-title{font-size:1.18rem;font-weight:700;text-align:center;line-height:1.3;}
+    .compet-desc{font-size:.92rem;color:#374151;text-align:center;line-height:1.45;}
+    .btn-cert{background:#6366f1;color:#fff;padding:.6rem 1.2rem;border-radius:.5rem;text-decoration:none;font-size:.9rem;}
+    .btn-cert:hover{background:#4f46e5;}
+    .future{opacity:.85;filter:grayscale(.15);}  /* style pour la certif future */
+
+    /* Details accordion */
+    details{width:100%;border-top:1px solid #e5e7eb;padding-top:1rem;margin-top:.5rem;text-align:left;}
+    summary{cursor:pointer;font-weight:600;list-style:none;}
+    summary::-webkit-details-marker{display:none;}
+    details[open] summary:after{content:"▲";float:right;font-size:.8rem;}
+    summary:after{content:"▼";float:right;font-size:.8rem;transition:transform .2s;}
+    details[open] summary:after{transform:rotate(180deg);}  
+    .room-list{margin-top:.7rem;padding-left:1.2rem;max-height:240px;overflow:auto;line-height:1.55;font-size:.9rem;}
+    .room-list li{margin-bottom:.25rem;}
+    .room-list span{color:#4b5563;font-style:italic;}
+
+    /* ===== CARTOGRAPHIE ===== */
+    .map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
+    .map-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.4rem;text-align:left;}
+    .map-card h4{font-size:1.15rem;font-weight:700;margin-bottom:.6rem;text-align:center;}
+    .map-card ul{list-style:disc;padding-left:1.4rem;line-height:1.6;font-size:.92rem;}
+
+    /* ===== CONTACT ===== */
+    #contact p{font-size:1.07rem;line-height:1.85;}
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:900px){
+      :root{--sidebar-width:0;}
+      .sidebar{display:none;}
+      .content{margin-left:0;width:100%;}
     }
   </style>
 </head>
 <body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div id="dateBox" class="sidebar-time"></div>
+    <h1 class="sidebar-title">Mehdi <span class="accent">TAMIRO</span></h1>
 
-<div id="app"></div>
+    <nav class="nav-links">
+      <a href="#hero" class="nav-btn">👤 Profil</a>
+      <a href="#ef3" class="nav-btn">🎯 EF3</a>
+      <a href="#certifications" class="nav-btn">🎓 Certifications</a>
+      <a href="#future" class="nav-btn">🚀 Futur</a>
+      <a href="#cartographie" class="nav-btn">🗺️ Cartographie</a>
+      <a href="#plan-oral" class="nav-btn">🕒 Plan 10 min</a>
+      <a href="#contact" class="nav-btn">📞 Contact</a>
+    </nav>
 
-<script>
-/* ================== FONCTIONS UTILES ================== */
-function shuffleArray(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
+    <div class="footer-text">© 2025 Mehdi TAMIRO</div>
+  </aside>
 
-/* ================== LISTE DE QUESTIONS ================== */
-const allQuestions = [
-  { text: "Le cristal vibre intensément. Quel outil utilisez-vous ?", choices: ["A. Sceptre conducteur", "B. Gants isolants", "C. Injecteur à mana"], correct: "B. Gants isolants" },
-  { text: "Une fissure s'ouvre ! Que faites-vous ?", choices: ["A. Injecter du mana pur", "B. Le refroidir", "C. Fuir"], correct: "B. Le refroidir" },
-  { text: "Le cristal devient rouge. Il pulse !", choices: ["A. Le frapper", "B. Canaliser le flux", "C. L’absorber"], correct: "B. Canaliser le flux" },
-  { text: "Une onde résonne dans la pièce. Réaction ?", choices: ["A. Se recroqueviller", "B. Analyser la fréquence", "C. Poser un cristal miroir"], correct: "C. Poser un cristal miroir" },
-  { text: "Le sol tremble légèrement.", choices: ["A. Stabiliser avec une rune", "B. Sauter dessus", "C. Ignorer le phénomène"], correct: "A. Stabiliser avec une rune" },
-  { text: "Des éclats flottent autour du cristal.", choices: ["A. Utiliser une cage de stabilisation", "B. Toucher les éclats", "C. Attendre sans rien faire"], correct: "A. Utiliser une cage de stabilisation" },
-  { text: "Un sifflement aigu se fait entendre.", choices: ["A. Couvrir ses oreilles", "B. Résonner avec un champ de mana", "C. Parler au cristal"], correct: "B. Résonner avec un champ de mana" },
-  { text: "Le cristal devient noir quelques secondes.", choices: ["A. Souffler dessus", "B. L’éloigner", "C. Injecter un peu de lumière"], correct: "C. Injecter un peu de lumière" },
-  { text: "Une aura froide envahit la pièce.", choices: ["A. Canaliser de la chaleur interne", "B. Sortir immédiatement", "C. Taper le mur"], correct: "A. Canaliser de la chaleur interne" },
-  { text: "Le cristal projette une image inconnue.", choices: ["A. Tenter une communication mentale", "B. La briser", "C. Toucher l’image"], correct: "A. Tenter une communication mentale" }
-];
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <!-- HERO -->
+    <section id="hero">
+      <h2 class="hero-sub">Parcours</h2>
+      <h1 class="hero-title">EF3 – Certification complémentaire</h1>
+      <p class="hero-accroche">Trois certifications professionnelles pour muscler mon BTS SIO SISR : cybersécurité défensive, pentest et administration Linux.</p>
+      <a href="#certifications" class="btn-main">Voir les certifications</a>
+    </section>
 
-// Variables principales
-let questions = [];    // contiendra 10 questions tirées
-let questionIndex = 0;
-let timer = 20;
-let intervalID = null;
-let started = false;
-let accepted = null;
-let score = 0;
-let logData = [];
-let gameOver = false;
-let showExplosion = false;
+    <!-- EF3 OVERVIEW -->
+    <section id="ef3">
+      <h2 class="title-big">Objectifs de l’épreuve EF3</h2><div class="divider"></div>
+      <p style="max-width:64rem;margin:0 auto;line-height:1.8;font-size:1.05rem;">
+        Le <strong>Parcours de certification complémentaire (EF3)</strong> démontre ma capacité à <em>planifier</em>, <em>réaliser</em> et <em>valoriser</em> un programme d’<strong>up‑skilling</strong> aligné sur le référentiel SISR.
+      </p>
+      <ul style="list-style:disc;padding-left:1.8rem;text-align:left;max-width:58rem;margin:1.3rem auto 0;font-size:1.05rem;line-height:1.8;">
+        <li><strong>Reconnaissance sectorielle</strong> : certifications validées par l’écosystème IT (Google, CompTIA, OffSec).</li>
+        <li><strong>Couverture fonctionnelle</strong> : plusieurs blocs de compétences du BTS (Support, Admin, Cyberséc.).</li>
+        <li><strong>Progression mesurable</strong> : trajectoire défensive → offensive → expertise, jalonnée d’attestations officielles.</li>
+      </ul>
+    </section>
 
-/* ========== Prépare & Lance le Jeu ========== */
-function initGame() {
-  // Mélanger + prendre 10 questions (ici la liste fait déjà 10)
-  questions = shuffleArray(allQuestions).map(q => ({
-    ...q,
-    choices: shuffleArray(q.choices)
-  }));
-  questionIndex = 0;
-  timer = 20;
-  score = 0;
-  logData = [];
-  gameOver = false;
-  showExplosion = false;
-  started = true;
-  startTimer();
-  render();
-}
+    <!-- CERTIFICATIONS -->
+    <section id="certifications">
+      <h2 class="title-big">Mes certifications</h2><div class="divider"></div>
+      <div class="compet-grid">
+        <!-- Google Cybersecurity -->
+        <div class="compet-card">
+          <img class="compet-logo" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg" alt="Google Cybersecurity Badge">
+          <h3 class="compet-title">Google Cybersecurity<br>Professional Certificate</h3>
+          <p class="compet-desc">8 modules Coursera – bases SOC & automatisation Python.</p>
+          <a href="https://www.coursera.org/account/accomplishments/certificate/2SFA9SBLY1HI" target="_blank" class="btn-cert" rel="noopener">Voir l’attestation</a>
+          <details>
+            <summary>Voir les 8 modules</summary>
+            <ul class="room-list">
+              <li>Foundations of Cybersecurity – <span>découverte du domaine, rôles</span></li>
+              <li>Play It Safe: Manage Security Risks – <span>gestion des risques & gouvernance</span></li>
+              <li>Connect and Protect: Networks – <span>concepts réseau & défense</span></li>
+              <li>Tools of the Trade: Linux and SQL – <span>commandes Linux, requêtes SQL</span></li>
+              <li>Assets, Threats, and Vulnerabilities – <span>modélisation menaces</span></li>
+              <li>Sound the Alarm: Detection and Response – <span>monitoring & SOC</span></li>
+              <li>Automate Cybersecurity Tasks with Python – <span>scripts sécurité</span></li>
+              <li>Put It to Work: Prepare for Jobs – <span>portfolio & recherche d’emploi</span></li>
+            </ul>
+          </details>
+        </div>
+  <!-- CompTIA Pentest+ -->
+        <div class="compet-card">
+          <img class="compet-logo" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/comptia.svg" alt="CompTIA Pentest+ Badge">
+          <h3 class="compet-title">CompTIA Pentest+<br>(TryHackMe)</h3>
+          <p class="compet-desc">22 rooms dédiées à l’examen PT0‑002.</p>
+          <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-LU85GCD9QR.pdf" target="_blank" class="btn-cert" rel="noopener">Voir l’attestation</a>
+          <details>
+            <summary>Voir les 22 rooms</summary>
+            <ul class="room-list">
+              <li>Burp Suite: The Basics – <span>prise en main proxy</span></li>
+              <li>Burp Suite: Repeater – <span>tests paramètre à paramètre</span></li>
+              <li>Burp Suite: Intruder – <span>fuzzing & brute‑force</span></li>
+              <li>Burp Suite: Other Modules – <span>Comparer, Decoder…</span></li>
+              <li>Burp Suite: Extensions – <span>ajout de plugins</span></li>
+              <li>Nmap – <span>scanner de ports</span></li>
+              <li>Wireshark: The Basics – <span>analyse réseau</span></li>
+              <li>Hydra – <span>force brute services</span></li>
+              <li>John the Ripper – <span>cracking CPU</span></li>
+              <li>Hashcat – <span>cracking GPU</span></li>
+              <li>Nikto – <span>scanner vulnérabilités web</span></li>
+              <li>SQL Map – <span>injection SQL automatisée</span></li>
+              <li>Enum4linux – <span>énumération SMB</span></li>
+              <li>Metasploit: Introduction – <span>prise en main</span></li>
+              <li>Metasploit: Exploitation – <span>modules exploit</span></li>
+              <li>Metasploit: Meterpreter – <span>post‑exploitation</span></li>
+              <li>Windows Exploitation Basics – <span>failles classiques</span></li>
+              <li>Linux Privilege Escalation – <span>élévation Linux</span></li>
+              <li>Windows Privilege Escalation – <span>élévation Windows</span></li>
+              <li>BloodHound Essentials – <span>cartographie Active Directory</span></li>
+              <li>Mimikatz & Pass-the-Hash – <span>extraction & ré‑utilisation creds</span></li>
+              <li>Attacktive Directory – <span>labo AD complet</span></li>
+            </ul>
+          </details>
+        </div>
 
-function startTimer() {
-  clearInterval(intervalID);
-  intervalID = setInterval(() => {
-    timer--;
-    if (timer <= 0) {
-      penalize();
-    }
-    render();
-  }, 1000);
-}
 
-function penalize() {
-  logData.push("❌ Mauvaise réponse (Temps écoulé)");
-  nextQuestion();
-}
-
-function nextQuestion() {
-  if (questionIndex < questions.length - 1) {
-    questionIndex++;
-    timer = 20;
-  } else {
-    endGame();
-  }
-  render();
-}
-
-function handleChoice(choice) {
-  const currentQ = questions[questionIndex];
-  if (choice === currentQ.correct) {
-    score++;
-    logData.push("✅ Bonne réponse");
-  } else {
-    logData.push("❌ Mauvaise réponse");
-  }
-  nextQuestion();
-}
-
-function endGame() {
-  gameOver = true;
-  started = false;
-  clearInterval(intervalID);
-  if (score < 5) showExplosion = true;
-  render();
-}
-
-/* ========== Messages finaux selon le score ========== */
-function getAdvertMessage() {
-  if (score === 0) return "/advert *NA* L'utilisateur a échoué. Le cristal l'a consumé. État : CK ☠️";
-  if (score < 2) return "/advert *NA* Blessures critiques : perte d'un œil et d'une main. Gravement touché 🩸";
-  if (score < 5) return "/advert *NA* Perte d'une main 🖐️ à la suite d'une mauvaise manipulation.";
-  return "/advert *NA* Le cristal a été stabilisé avec succès. Aucun membre perdu. 🎉";
-}
-
-function getFinalMessage() {
-  if (score === 0) return "☠️ Échec total. Le cristal vous consume. Vous êtes déclaré CK.";
-  if (score < 2) return "🩸 Résultat critique : Perte d'un œil et d'une main. État : gravement blessé.";
-  if (score < 5) return "🖐️ Résultat faible : Perte d'une main.";
-  return "🎉 Cristal stabilisé. Aucun membre perdu de façon définitive.";
-}
-
-function getWhatIfMessage() {
-  return `
-    <h3 style="color:#7cafff;margin-top:10px;">🧠 Et si tu avais échoué ?</h3>
-    <ul style="margin-left:20px;color:#ccc;font-size:0.9rem;">
-      <li>0 bonnes réponses : CK instantané ☠️</li>
-      <li>1 à 2 bonnes réponses : Perte d'un œil + d'une main 🩸</li>
-      <li>3 à 4 bonnes réponses : Perte d'une main 🖐️</li>
-      <li>5 ou plus : survivant 🧍‍♂️</li>
-    </ul>
-  `;
-}
-
-function handleRefusal() {
-  // Si on refuse, on revient sur un ecran style “non” + on ne commence pas le jeu
-  // Score=0 => CK
-  score = 0;
-  gameOver = true;
-  started = false;
-  showExplosion = true;
-  logData = ["Le joueur a refusé le test"];
-  render();
-}
-
-function restartGame() {
-  accepted = null;
-  started = false;
-  clearInterval(intervalID);
-  render();
-}
-
-/* ========== RENDER ========== */
-function render() {
-  const app = document.getElementById("app");
-
-  // Écran d’accueil
-  if (accepted === null) {
-    app.innerHTML = `
-      <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#000;color:#fff;text-align:center;padding:20px;">
-        <h1 style="font-size:2rem;margin-bottom:20px;">🧪 Vous voulez lutter pour votre vie ?</h1>
-        <div>
-          <button class="button" style="background:#3cb46e;" onclick="accepted=true;initGame()">Oui</button>
-          <button class="button" style="background:#e54848;" onclick="accepted=false;handleRefusal()">Non</button>
+        <!-- TryHackMe Complete Beginner -->
+        <div class="compet-card">
+          <img class="compet-logo" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tryhackme.svg" alt="TryHackMe Logo">
+          <h3 class="compet-title">TryHackMe – Complete Beginner</h3>
+          <p class="compet-desc">26 rooms – bases Linux, réseau & web.</p>
+          <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-RUALOZJ3I0.pdf" target="_blank" class="btn-cert" rel="noopener">Voir l’attestation</a>
+          <details>
+            <summary>Voir les 26 rooms</summary>
+            <ul class="room-list">
+              <li>Starting Out in Cyber Security – <span>vue d’ensemble secteur</span></li>
+              <li>Introductory Researching – <span>OSINT & recherche</span></li>
+              <li>Linux Fundamentals Part 1 – <span>commandes basiques</span></li>
+              <li>Linux Fundamentals Part 2 – <span>gestion fichiers/processus</span></li>
+              <li>Linux Fundamentals Part 3 – <span>services réseau</span></li>
+              <li>Networking Fundamentals – <span>couches & protocoles</span></li>
+              <li>Web Application Security Fundamentals – <span>vulnérabilités web</span></li>
+              <li>Hash Cracking – <span>théorie des hash</span></li>
+              <li>John the Ripper – <span>outil CPU cracking</span></li>
+              <li>Hydra – <span>brute force</span></li>
+              <li>Nmap – <span>cartographie réseau</span></li>
+              <li>Metasploit: Introduction – <span>interface</span></li>
+              <li>Metasploit: Exploitation – <span>modules exploit</span></li>
+              <li>Burp Suite: The Basics – <span>proxy interception</span></li>
+              <li>OWASP Top 10 – <span>vulnérabilités majeures</span></li>
+              <li>SQL Injection Fundamentals – <span>attaque injection</span></li>
+              <li>Command Injection – <span>exécution commandes</span></li>
+              <li>File Inclusion – <span>LFI/RFI</span></li>
+              <li>Directory Traversal – <span>chemins relatifs</span></li>
+              <li>Shells & Privilege Escalation – <span>post‑exploitation</span></li>
+              <li>Windows Fundamentals – <span>bases OS</span></li>
+              <li>Windows Privilege Escalation – <span>rooter Windows</span></li>
+              <li>Vulnerability Scanning – <span>scanners</span></li>
+              <li>Blue (CTF) – <span>exploit EternalBlue</span></li>
+              <li>Bounty Hacker (CTF) – <span>CTF Linux basique</span></li>
+              <li>Ice (CTF) – <span>exploit ColdFusion</span></li>
+            </ul>
+          </details>
         </div>
       </div>
-    `;
-    return;
-  }
 
-  // Si on a refusé => Écran de fin direct (score=0)
-  if (accepted === false && !started && gameOver) {
-    const logList = logData.map(item => `<li>${item}</li>`).join("");
-    app.innerHTML = `
-      <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#000;color:#fff;text-align:center;padding:20px;">
-        <div class="container">
-          <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
-          <p style="font-weight:bold;">Score : ${score} / 10</p>
-          <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-          ${showExplosion ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>` : ""}
-          ${getWhatIfMessage()}
-          <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
-          <div class="advert">${getAdvertMessage()}</div>
-          <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
-          
-          ${
-            logList
-              ? `<div style="margin-top:20px;">
-                  <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                  <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
-                    ${logList}
-                  </ul>
-                </div>`
-              : ""
-          }
-          <p class="notes">Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬</p>
+    <!-- FUTURE CERTIFICATION -->
+    <section id="future">
+      <h2 class="title-big">Certification payante à venir</h2><div class="divider"></div>
+      <div class="compet-grid" style="justify-content:center;">
+        <div class="compet-card future">
+          <img class="compet-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUY47FUxjG-m61PwH3y5YoVJ6S9JtL7AJpnA&usqp=CAU" alt="OSCP badge">
+          <h3 class="compet-title">Offensive Security Certified Professional (OSCP)</h3>
+          <p class="compet-desc">Certification pentest avancée : 24 h d’examen pratique – objectif Q4‑2026.</p>
+          <a href="https://www.offsec.com/courses/pen200/" target="_blank" class="btn-cert" rel="noopener">Programme OSCP</a>
         </div>
       </div>
-    `;
-    return;
-  }
+    </section>
 
-  // Cas : pas de questions => chargement
-  if (!questions.length && started) {
-    app.innerHTML = `<div style="min-height:100vh;display:flex;justify-content:center;align-items:center;background:#000;"><p>Chargement des questions...</p></div>`;
-    return;
-  }
-
-  // Écran de fin normal
-  if (gameOver && !started && questions.length) {
-    const logList = logData.map(item => `<li>${item}</li>`).join("");
-    app.innerHTML = `
-      <div class="container">
-        <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
-        <p style="font-weight:bold;">🔍 Résultats :</p>
-        <p style="color:lightgreen;">Score : ${score} / 10</p>
-        <p style="margin:10px 0;color:#fbb;">${getFinalMessage()}</p>
-        ${showExplosion ? `<div style="margin-top:10px;color:#f66;font-weight:bold;" class="bounce">💥 Une explosion cristalline secoue la pièce !</div>` : ""}
-        ${getWhatIfMessage()}
-        <p style="margin:10px 0;color:#ffb700;font-size:0.9rem;">📋 Copie et colle ce message dans le chat en jeu :</p>
-        <div class="advert">${getAdvertMessage()}</div>
-        <button class="button" style="margin-top:10px;" onclick="restartGame()">🔄 Recommencer</button>
-        
-        ${
-          logList
-            ? `<div style="margin-top:20px;">
-                <h2 style="margin-bottom:8px;color:#b8b2ff;">🧾 Journal :</h2>
-                <ul style="color:#ccc;font-size:0.9rem;list-style:disc;padding-left:20px;">
-                  ${logList}
-                </ul>
-              </div>`
-            : ""
-        }
-        <p class="notes">Réalisé par Kito Ate – Scientifique de la guilde Kenkyû 🧬</p>
+    <!-- CARTOGRAPHIE -->
+    <section id="cartographie">
+      <h2 class="title-big">Cartographie détaillée des compétences</h2><div class="divider"></div>
+      <p style="max-width:62rem;margin:0 auto;line-height:1.8;font-size:1.05rem;">Chaque certification renforce des blocs précis du BTS SIO SISR :</p>
+      <div class="map-grid">
+        <!-- Google card -->
+        <div class="map-card">
+          <h4>Google Cybersecurity</h4>
+          <ul>
+            <li><strong>Bloc 3 – Support</strong> : gestion incidents via SIEM & SOC (Splunk‑like).</li>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : analyse menaces, plans de réponse.</li>
+            <li><strong>Bloc 1 – Pro dev.</strong> : veille techno & portfolio sécurité.</li>
+          </ul>
+        </div>
+        <!-- Pentest+ card -->
+        <div class="map-card">
+          <h4>CompTIA Pentest+</h4>
+          <ul>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : méthodologie de test d’intrusion.</li>
+            <li><strong>Bloc 5 – Admin S&N</strong> : identification vulnérabilités réseau & système.</li>
+          </ul>
+        </div>
+        <!-- THM card -->
+        <div class="map-card">
+          <h4>THM Complete Beginner</h4>
+          <ul>
+            <li><strong>Bloc 2 – Exploitation données</strong> : scripts Bash, gestion logs.</li>
+            <li><strong>Bloc 5 – Admin S&N</strong> : configuration services web & réseau.</li>
+          </ul>
+        </div>
+        <!-- OSCP card -->
+        <div class="map-card">
+          <h4>OSCP (prévu)</h4>
+          <ul>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : pentest avancé, reporting détaillé.</li>
+            <li><strong>Bloc 5 – Admin S&N</strong> : remédiation & durcissement post‑audit.</li>
+          </ul>
+        </div>
       </div>
-    `;
-    return;
-  }
+    </section>
 
-  // Écran de jeu
-  const currentQ = questions[questionIndex];
-  const logList = logData.map(item => `<li>${item}</li>`).join("");
-  app.innerHTML = `
-    <div class="container">
-      <h1>💠 Cristal Instable – Surcharge Fragmentée</h1>
-      <p>⏳ Temps restant : <span style="color:#ffeb8a;font-weight:bold;">${timer}s</span></p>
-      <p style="margin:10px 0;">${currentQ.text}</p>
-      <div class="choices">
-        ${currentQ.choices.map((choice, idx) => `
-          <button class="button" style="width:100%;margin:5px 0;" onclick="handleChoice('${choice}')">
-            ${choice}
-          </button>
-        `).join("")}
-      </div>
-
-      ${
-        logList.length
-          ? `<div style="margin-top:20px;">
-              <h2 style="color:#b8b2ff;">🧾 Journal :</h2>
-              <ul style="font-size:0.9rem;color:#ccc;list-style:disc;padding-left:20px;">
-                ${logList}
-              </ul>
-            </div>`
-          : ""
-      }
-    </div>
-  `;
-}
-
-/* ========== Lancement initial ========== */
-render();
-</script>
-</body>
-</html>
+    <!-- PLAN ORAL -->
+    <section id="plan-oral">
+      <h2 class="title-big">Plan de présentation – 10 minutes</h2><div class="divider"></div>
+      <ol style="max-width:64rem;margin:0 auto;text-align:left;font-size:1.06rem;line-height:1.8;">
+        <li><strong>1′</strong> – Contexte EF3 & objectifs.</li>
+        <li><strong>2′</strong> – Google Cybersecurity : apports & application.</li>
+        <li><strong>2′</strong> – CompTIA Pentest+ : labs & montée en compétence.</li>
+        <li><strong>2′</strong> – THM Complete Beginner : fondamentaux & transfert SISR.</li>
+        <li><strong>1′</strong> – OSCP futur : stratégie d’expertise.</
