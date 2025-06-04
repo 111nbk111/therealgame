@@ -2,18 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>EF3 – Parcours de certification complémentaire | Mehdi TAMIRO</title>
+  <title>EF3 – Parcours de certification complémentaire | Mehdi TAMIRO -> </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts -->
+
+  <!-- Police Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Déclaration des flux (toujours utiles pour les lecteurs externes) -->
+  <link rel="alternate" type="application/rss+xml" title="Flux RSS – Certifications Cybersécurité de Mehdi TAMIRO" href="certifications-cybersecurite.xml">
+  <link rel="alternate" type="application/rss+xml" title="Flux RSS externe – Sélection RSS.app" href="https://rss.app/feeds/t0pDgXSca1eY0eER.xml">
+
   <style>
-    /* ========== RESET ========== */
+    /* ===== RESET & GÉNÉRAL ===== */
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
     body{background:#f9fafb;color:#1f2937;overflow-x:hidden;scroll-behavior:smooth;}
+    a{color:inherit;text-decoration:none;}
 
-    /* ========== VARIABLES ========== */
     :root{
       --sidebar-width:16rem;
       --accent:#60a5fa;
@@ -23,7 +29,6 @@
       --max-width:1100px;
     }
 
-    /* ========== LAYOUT ========== */
     .layout{display:flex;min-height:100vh;}
     .content{margin-left:var(--sidebar-width);width:calc(100% - var(--sidebar-width));padding:2rem;display:flex;flex-direction:column;align-items:center;}
     section{width:100%;max-width:var(--max-width);padding:4rem 1rem;text-align:center;}
@@ -36,7 +41,7 @@
     .sidebar-title{text-align:center;font-size:1.6rem;font-weight:700;margin-bottom:1.3rem;line-height:1.3;}
     .accent{color:var(--accent);}  
     .nav-links{display:flex;flex-direction:column;gap:.7rem;}
-    .nav-btn{display:flex;align-items:center;gap:.55rem;padding:.5rem .8rem;border-radius:.5rem;color:#fff;text-decoration:none;transition:background .25s;font-size:1.05rem;}
+    .nav-btn{display:flex;align-items:center;gap:.55rem;padding:.5rem .8rem;border-radius:.5rem;color:#fff;transition:background .25s;font-size:1.05rem;}
     .nav-btn:hover{background:#374151;}
     .footer-text{margin-top:auto;text-align:center;font-size:.75rem;color:#9ca3af;}
 
@@ -48,6 +53,16 @@
     .btn-main{display:inline-block;background:var(--gradient);color:#fff;padding:.9rem 1.8rem;border-radius:var(--radius);font-size:1.05rem;text-decoration:none;box-shadow:0 3px 9px rgba(0,0,0,.17);transition:opacity .25s;}
     .btn-main:hover{opacity:.9;}
 
+    /* ===== PARCOURS ===== */
+    .parcours-container{position:relative;max-width:80rem;margin:2rem auto;padding-left:2.5rem;}
+    .parcours-container::before{content:"";position:absolute;left:1.2rem;top:0;bottom:0;width:2px;background:#d1d5db;}
+    .parcours-item{display:flex;gap:1rem;margin-bottom:2rem;align-items:flex-start;transition:transform .25s;}
+    .parcours-item:hover{transform:translateY(-3px);}  
+    .year-block{min-width:7rem;color:#fff;text-align:center;padding:.5rem;border-radius:.55rem;font-weight:700;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.15);}  
+    .pink-bg{background:#ec4899;} .yellow-bg{background:#f59e0b;} .gray-bg{background:#4b5563;} .green-bg{background:#10b981;}
+    .desc{flex:1;background:#fff;padding:1rem;border-radius:.55rem;box-shadow:0 2px 4px rgba(0,0,0,.1);text-align:left;border-left:4px solid #3b82f6;}
+    .desc-title{font-weight:700;margin-bottom:.3rem;}
+
     /* ===== CERTIFICATIONS GRID ===== */
     .compet-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:2.2rem;max-width:var(--max-width);margin:3rem auto;}
     .compet-card{width:300px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:2.4rem 1.9rem;display:flex;flex-direction:column;align-items:center;gap:1.4rem;transition:transform .25s;}
@@ -55,17 +70,15 @@
     .compet-logo{width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.08));}
     .compet-title{font-size:1.18rem;font-weight:700;text-align:center;line-height:1.3;}
     .compet-desc{font-size:.92rem;color:#374151;text-align:center;line-height:1.45;}
-    .btn-cert{background:#6366f1;color:#fff;padding:.6rem 1.2rem;border-radius:.5rem;text-decoration:none;font-size:.9rem;}
+    .btn-cert{background:#6366f1;color:#fff;padding:.6rem 1.2rem;border-radius:.5rem;font-size:.9rem;}
     .btn-cert:hover{background:#4f46e5;}
-    .future{opacity:.85;filter:grayscale(.15);}  /* style pour la certif future */
+    .future{opacity:.85;filter:grayscale(.15);}  
 
-    /* Details accordion */
     details{width:100%;border-top:1px solid #e5e7eb;padding-top:1rem;margin-top:.5rem;text-align:left;}
     summary{cursor:pointer;font-weight:600;list-style:none;}
     summary::-webkit-details-marker{display:none;}
-    details[open] summary:after{content:"▲";float:right;font-size:.8rem;}
     summary:after{content:"▼";float:right;font-size:.8rem;transition:transform .2s;}
-    details[open] summary:after{transform:rotate(180deg);}  
+    details[open] summary:after{transform:rotate(180deg);}
     .room-list{margin-top:.7rem;padding-left:1.2rem;max-height:240px;overflow:auto;line-height:1.55;font-size:.9rem;}
     .room-list li{margin-bottom:.25rem;}
     .room-list span{color:#4b5563;font-style:italic;}
@@ -76,8 +89,12 @@
     .map-card h4{font-size:1.15rem;font-weight:700;margin-bottom:.6rem;text-align:center;}
     .map-card ul{list-style:disc;padding-left:1.4rem;line-height:1.6;font-size:.92rem;}
 
-    /* ===== CONTACT ===== */
-    #contact p{font-size:1.07rem;line-height:1.85;}
+    /* ===== RSS FEED ===== */
+    #rss-feed{max-width:64rem;margin:0 auto;}
+    #rss-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.8rem;}
+    #rss-list li{background:#fff;padding:.9rem 1.1rem;border-radius:.55rem;box-shadow:0 1px 4px rgba(0,0,0,.08);text-align:left;}
+    #rss-list a{color:#1f2937;font-weight:600;}
+    #rss-list a:hover{text-decoration:underline;}
 
     /* ===== RESPONSIVE ===== */
     @media(max-width:900px){
@@ -100,7 +117,7 @@
       <a href="#certifications" class="nav-btn">🎓 Certifications</a>
       <a href="#future" class="nav-btn">🚀 Futur</a>
       <a href="#cartographie" class="nav-btn">🗺️ Cartographie</a>
-      <a href="#plan-oral" class="nav-btn">🕒 Plan 10 min</a>
+      <a href="#flux-rss" class="nav-btn">🔔 Flux RSS</a>
       <a href="#contact" class="nav-btn">📞 Contact</a>
     </nav>
 
@@ -113,7 +130,7 @@
     <section id="hero">
       <h2 class="hero-sub">Parcours</h2>
       <h1 class="hero-title">EF3 – Certification complémentaire</h1>
-      <p class="hero-accroche">Trois certifications professionnelles pour muscler mon BTS SIO SISR : cybersécurité défensive, pentest et administration Linux.</p>
+      <p class="hero-accroche">Trois certifications professionnelles pour enrichir mes compétences en BTS SIO SISR : cybersécurité défensive, pentest et administration Linux.</p>
       <a href="#certifications" class="btn-main">Voir les certifications</a>
     </section>
 
@@ -124,10 +141,21 @@
         Le <strong>Parcours de certification complémentaire (EF3)</strong> démontre ma capacité à <em>planifier</em>, <em>réaliser</em> et <em>valoriser</em> un programme d’<strong>up‑skilling</strong> aligné sur le référentiel SISR.
       </p>
       <ul style="list-style:disc;padding-left:1.8rem;text-align:left;max-width:58rem;margin:1.3rem auto 0;font-size:1.05rem;line-height:1.8;">
-        <li><strong>Reconnaissance sectorielle</strong> : certifications validées par l’écosystème IT (Google, CompTIA, OffSec).</li>
-        <li><strong>Couverture fonctionnelle</strong> : plusieurs blocs de compétences du BTS (Support, Admin, Cyberséc.).</li>
-        <li><strong>Progression mesurable</strong> : trajectoire défensive → offensive → expertise, jalonnée d’attestations officielles.</li>
+        <li><strong>Certifications reconnues</strong> : Obtenir des titres officiels du secteur IT (par ex. : Google, CompTIA, OffSec). -> Compétences visées</li>
+        <li><strong>Couvrir plusieurs blocs du BTS :</strong> : Support utilisateur, L'administration systèmes & réseaux, la Cybersécurité -> Progression claire</li>
+        <li><strong>Avancer étape par étape :</strong> : Bases défensives,Techniques offensives -> Niveau expert</li>
       </ul>
+    </section>
+
+    <!-- PARCOURS SCOLAIRE -->
+    <section id="parcours-scolaire">
+      <h2 class="title-big">Parcours scolaire</h2><div class="divider"></div>
+      <div class="parcours-container">
+        <div class="parcours-item"><div class="year-block pink-bg">2026‑2028</div><div class="desc"><p class="desc-title">Mastère Cybersécurité & IA</p><p><a href="https://www.efrei.fr/wp-content/uploads/2022/11/Fiche-telechargable-MSc-cybersecurite-and-artificial-intelligence.pdf" target="_blank" rel="noopener">EFREI Paris (prévu)</a></p></div></div>
+        <div class="parcours-item"><div class="year-block pink-bg">2025‑2026</div><div class="desc"><p class="desc-title">B3 Ingénierie & Cybersécurité</p><p><a href="https://orange.jobs/site/fr-alternance/" target="_blank" rel="noopener">EFREI Paris (prévu) – Alternance Orange Prisme</a></p></div></div>
+        <div class="parcours-item"><div class="year-block yellow-bg">2023‑2025</div><div class="desc"><p class="desc-title">BTS SIO SISR</p><p>EFREI Paris – en cours</p></div></div>
+        <div class="parcours-item"><div class="year-block gray-bg">2019‑2022</div><div class="desc"><p class="desc-title">Bac STI2D</p><p>Lycée A. Chérioux</p></div></div>
+      </div>
     </section>
 
     <!-- CERTIFICATIONS -->
@@ -154,11 +182,12 @@
             </ul>
           </details>
         </div>
-  <!-- CompTIA Pentest+ -->
+
+        <!-- CompTIA Pentest+ -->
         <div class="compet-card">
           <img class="compet-logo" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/comptia.svg" alt="CompTIA Pentest+ Badge">
           <h3 class="compet-title">CompTIA Pentest+<br>(TryHackMe)</h3>
-          <p class="compet-desc">22 rooms dédiées à l’examen PT0‑002.</p>
+          <p class="compet-desc">22 rooms dédiées à l’examen PT0‑002.</p>
           <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-LU85GCD9QR.pdf" target="_blank" class="btn-cert" rel="noopener">Voir l’attestation</a>
           <details>
             <summary>Voir les 22 rooms</summary>
@@ -183,12 +212,11 @@
               <li>Linux Privilege Escalation – <span>élévation Linux</span></li>
               <li>Windows Privilege Escalation – <span>élévation Windows</span></li>
               <li>BloodHound Essentials – <span>cartographie Active Directory</span></li>
-              <li>Mimikatz & Pass-the-Hash – <span>extraction & ré‑utilisation creds</span></li>
+              <li>Mimikatz & Pass‑the‑Hash – <span>extraction & ré‑utilisation creds</span></li>
               <li>Attacktive Directory – <span>labo AD complet</span></li>
             </ul>
           </details>
         </div>
-
 
         <!-- TryHackMe Complete Beginner -->
         <div class="compet-card">
@@ -229,6 +257,7 @@
           </details>
         </div>
       </div>
+    </section>
 
     <!-- FUTURE CERTIFICATION -->
     <section id="future">
@@ -237,7 +266,7 @@
         <div class="compet-card future">
           <img class="compet-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUY47FUxjG-m61PwH3y5YoVJ6S9JtL7AJpnA&usqp=CAU" alt="OSCP badge">
           <h3 class="compet-title">Offensive Security Certified Professional (OSCP)</h3>
-          <p class="compet-desc">Certification pentest avancée : 24 h d’examen pratique – objectif Q4‑2026.</p>
+          <p class="compet-desc">Certification pentest avancée : 24 h d’examen pratique – objectif Q4‑2026.</p>
           <a href="https://www.offsec.com/courses/pen200/" target="_blank" class="btn-cert" rel="noopener">Programme OSCP</a>
         </div>
       </div>
@@ -246,50 +275,95 @@
     <!-- CARTOGRAPHIE -->
     <section id="cartographie">
       <h2 class="title-big">Cartographie détaillée des compétences</h2><div class="divider"></div>
-      <p style="max-width:62rem;margin:0 auto;line-height:1.8;font-size:1.05rem;">Chaque certification renforce des blocs précis du BTS SIO SISR :</p>
+      <p style="max-width:62rem;margin:0 auto;line-height:1.8;font-size:1.05rem;">Chaque certification renforce des blocs précis du BTS SIO SISR :</p>
       <div class="map-grid">
         <!-- Google card -->
         <div class="map-card">
           <h4>Google Cybersecurity</h4>
           <ul>
-            <li><strong>Bloc 3 – Support</strong> : gestion incidents via SIEM & SOC (Splunk‑like).</li>
-            <li><strong>Bloc 4 – Cyberséc.</strong> : analyse menaces, plans de réponse.</li>
-            <li><strong>Bloc 1 – Pro dev.</strong> : veille techno & portfolio sécurité.</li>
+            <li><strong>Bloc 3 – Support</strong> : gestion incidents</li>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : analyse menaces, plans de réponse.</li>
+            <li><strong>Bloc 1 – Pro dev.</strong> : veille techno & portfolio sécurité.</li>
           </ul>
         </div>
         <!-- Pentest+ card -->
         <div class="map-card">
           <h4>CompTIA Pentest+</h4>
           <ul>
-            <li><strong>Bloc 4 – Cyberséc.</strong> : méthodologie de test d’intrusion.</li>
-            <li><strong>Bloc 5 – Admin S&N</strong> : identification vulnérabilités réseau & système.</li>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : méthodologie de test d’intrusion.</li>
+            <li><strong>Bloc 5 – Admin </strong> : identification vulnérabilités réseau & système.</li>
           </ul>
         </div>
         <!-- THM card -->
         <div class="map-card">
           <h4>THM Complete Beginner</h4>
           <ul>
-            <li><strong>Bloc 2 – Exploitation données</strong> : scripts Bash, gestion logs.</li>
-            <li><strong>Bloc 5 – Admin S&N</strong> : configuration services web & réseau.</li>
+            <li><strong>Bloc 2 – Exploitation données</strong> : scripts Bash, gestion logs.</li>
+            <li><strong>Bloc 5 – Admin</strong> : configuration services web & réseau.</li>
           </ul>
         </div>
         <!-- OSCP card -->
         <div class="map-card">
           <h4>OSCP (prévu)</h4>
           <ul>
-            <li><strong>Bloc 4 – Cyberséc.</strong> : pentest avancé, reporting détaillé.</li>
-            <li><strong>Bloc 5 – Admin S&N</strong> : remédiation & durcissement post‑audit.</li>
+            <li><strong>Bloc 4 – Cyberséc.</strong> : pentest avancé, reporting détaillé.</li>
+            <li><strong>Bloc 5 – Admin</strong> : remédiation & durcissement post‑audit.</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- PLAN ORAL -->
-    <section id="plan-oral">
-      <h2 class="title-big">Plan de présentation – 10 minutes</h2><div class="divider"></div>
-      <ol style="max-width:64rem;margin:0 auto;text-align:left;font-size:1.06rem;line-height:1.8;">
-        <li><strong>1′</strong> – Contexte EF3 & objectifs.</li>
-        <li><strong>2′</strong> – Google Cybersecurity : apports & application.</li>
-        <li><strong>2′</strong> – CompTIA Pentest+ : labs & montée en compétence.</li>
-        <li><strong>2′</strong> – THM Complete Beginner : fondamentaux & transfert SISR.</li>
-        <li><strong>1′</strong> – OSCP futur : stratégie d’expertise.</
+    <!-- FLUX RSS / VEILLE TECHNO -->
+    <section id="flux-rss">
+      <h2 class="title-big">Veille technologique</h2><div class="divider"></div>
+      <p style="max-width:60rem;margin:0 auto 1.8rem;line-height:1.7;font-size:1.05rem;">Les 10 derniers articles du flux « certification cybersécurité » sélectionné automatiquement :</p>
+      <div id="rss-feed">
+        <ul id="rss-list"></ul>
+      </div>
+      <noscript style="font-size:.9rem;">Afficher le flux RSS.</noscript>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2 class="title-big">Contact</h2><div class="divider"></div>
+      <p>Besoin d’informations supplémentaires ? <a href="https://www.linkedin.com/in/mehdi-t00/">Linkedin</a>.</p>
+    </section>
+  </main>
+</div>
+
+<!-- SCRIPT DATE & RSS -->
+<script>
+  /* ===== Date dans la sidebar ===== */
+  const dateBox = document.getElementById('dateBox');
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  dateBox.textContent = new Date().toLocaleDateString('fr-FR', opts);
+
+  /* ===== Chargement RSS ===== */
+  async function loadRSS(){
+    const feedUrl = 'https://rss.app/feeds/t0pDgXSca1eY0eER.xml';
+    const proxy   = `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`; // évite les erreurs CORS
+    try {
+      const res   = await fetch(proxy);
+      const xml   = await res.text();
+      const doc   = new DOMParser().parseFromString(xml, 'application/xml');
+      const items = Array.from(doc.querySelectorAll('item')).slice(0,10);
+      const list  = document.getElementById('rss-list');
+      items.forEach(item => {
+        const li   = document.createElement('li');
+        const link = document.createElement('a');
+        link.href  = item.querySelector('link')?.textContent ?? '#';
+        link.target = '_blank';
+        link.rel   = 'noopener';
+        link.textContent = item.querySelector('title')?.textContent ?? 'Article';
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+    } catch(err){
+      document.getElementById('rss-feed').innerHTML = '<p style="color:#b91c1c;font-weight:600;">Impossible de charger le flux RSS.</p>';
+      console.error(err);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadRSS);
+</script>
+</body>
+</html>
